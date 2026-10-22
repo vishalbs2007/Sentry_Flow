@@ -1,0 +1,18 @@
+This is a placeholder for the Cisco Packet Tracer topology file.
+To create the actual topology:
+1. Open Cisco Packet Tracer
+2. Follow the topology design in docs/simulation/topology.md
+3. Save the file as flowsentry_topology.pkt
+
+Topology Design Summary:
+- Router: 2911 (Gateway)
+- Switch: 2960-24TT
+- Clients: 4 PCs (10.0.0.10-13)
+- Servers: 4 Servers (10.0.1.100-103)
+- Traffic classes: Web, VoIP, Streaming, File Transfer
+
+IP Addressing:
+- Client Network: 10.0.0.0/24 (Gateway: 10.0.0.1)
+- Server Network: 10.0.1.0/24 (Gateway: 10.0.1.1)
+
+For detailed instructions, see docs/simulation/topology.md
