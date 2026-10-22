@@ -251,6 +251,7 @@ def test_empty_pcap_handling(output_dir: Path, command: list) -> dict:
     
     Args:
         output_dir: Directory for test files
+        command: CICFlowMeter command list
         
     Returns:
         Dictionary with test results
@@ -270,6 +271,8 @@ def test_empty_pcap_handling(output_dir: Path, command: list) -> dict:
         "-f", str(empty_pcap),
         "-c", str(output_csv)
     ]
+    
+    print(f"Command: {' '.join(full_command)}")
     
     try:
         result = subprocess.run(
