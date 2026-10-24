@@ -12,6 +12,7 @@ Do not build everything at once. A phase starts only when the previous phase's *
 | Phase | Name | Tasks | Needs human decision before/within |
 |---|---|---|---|
 | 0 | Specification | (documents) | U-01, U-02, U-07, U-13, U-14 acknowledged |
+| 0.5 | Network Simulation | CN-023 | — (manual Packet Tracer implementation) |
 | 1 | Repository Foundation | CN-001 | U-13 (OS/privileges) |
 | 2 | Dataset Pipeline | CN-002, CN-003, CN-004, CN-005 | **G-LABEL** (U-01/02/03/16/17), U-04, U-09, U-10 |
 | 3 | ML Training | CN-006, CN-007, CN-008, CN-009 | RID-06 SVM policy |
@@ -25,6 +26,8 @@ Do not build everything at once. A phase starts only when the previous phase's *
 
 ## Dependency graph
 ```text
+CN-023 (optional) → [manual Packet Tracer implementation]
+
 CN-001 → CN-002 → CN-003 → [G-LABEL human approval] → CN-004 → CN-005
 CN-005 → CN-006 ─┐
 CN-005 → CN-007 ─┤
@@ -35,7 +38,7 @@ CN-012 + CN-014 → CN-015 → CN-016 → CN-017
 CN-011 + CN-015 (+ CN-017 if delivered) → CN-018
 CN-015 [+CN-017, CN-018] → CN-019 → CN-020 → CN-021 → CN-022
 ```
-Note: CN-013 (verifying CICFlowMeter) may be done early, in parallel with Phase 2 *by a human*, because it has long lead time and de-risks everything (U-05). Agents still execute one task at a time.
+Note: CN-023 (Packet Tracer simulation) is independent and can be done anytime; provides supplementary PCAPs for CN-015. CN-013 (verifying CICFlowMeter) may be done early, in parallel with Phase 2 *by a human*, because it has long lead time and de-risks everything (U-05). Agents still execute one task at a time.
 
 ## Cut-lines if time runs short (decided by the team, not the agent)
 1. **Must deliver (core):** Phases 1–5 and CN-013…CN-015 (dataset → four-model comparison → registry → PCAP classification), plus CN-019/020 (scoped to delivered parts) and CN-022.
@@ -52,6 +55,16 @@ Note: CN-013 (verifying CICFlowMeter) may be done early, in parallel with Phase 
 - **Verification gate:** Team reads all six, resolves or consciously defers each `U-xx` (at minimum: U-01 class set, U-07 objectives text, U-13 OS/privileges, U-14 dataset access) and records answers in `docs/decisions/decisions.md`.
 - **Failure conditions:** Documents contradict each other or Review-1; an assumption is presented as a requirement; the team cannot access any dataset (re-plan U-02/U-14 before Phase 2).
 - **Definition of Done:** Documents committed; decision log started; the first agent prompt issued.
+
+## Phase 0.5 — Network Simulation (OPTIONAL)
+- **Goal:** Create a Cisco Packet Tracer network topology demonstrating the four traffic classes and generate supplementary test PCAPs.
+- **Dependencies:** None (independent of other phases; can be done anytime).
+- **Tasks:** CN-023.
+- **Expected outputs:** Packet Tracer topology file (`.pkt`), topology documentation, traffic generation procedures, optional exported PCAP files for supplementary testing.
+- **Verification gate:** Topology design documented with IP addressing, services, and traffic scenarios; structure ready for manual implementation in Packet Tracer GUI.
+- **Failure conditions:** None critical (this phase is supplementary and course-demonstration focused).
+- **Definition of Done:** Documentation complete showing topology design, IP scheme, and traffic generation steps. Note: Actual `.pkt` file creation and PCAP export require manual GUI work in Cisco Packet Tracer and are not agent-automatable.
+- **Status:** ✅ DONE — Structure and documentation complete; manual Packet Tracer implementation available for demo enhancement.
 
 ## Phase 1 — Repository Foundation
 - **Goal:** A clean, runnable skeleton: structure, config loading, logging, errors, tests harness, environment verification.
@@ -142,6 +155,7 @@ Note: CN-013 (verifying CICFlowMeter) may be done early, in parallel with Phase 
 - **Verification gate:** A teammate not involved in a task follows the runbook on a clean machine; every number in docs traces to an artifact; claims match delivered features.
 - **Failure conditions:** Docs describing undelivered features; numbers without artifacts.
 - **Definition of Done:** AC-013 satisfied.
+- **Note:** If CN-023 Packet Tracer topology was implemented manually, demo can include: (1) visual topology display, (2) live traffic generation in Packet Tracer, (3) PCAP export and classification by FlowSentry, demonstrating end-to-end networking and ML integration.
 
 ---
 
@@ -156,3 +170,5 @@ Note: CN-013 (verifying CICFlowMeter) may be done early, in parallel with Phase 
 | RK-5 | Live capture needs privileges/drivers not available on demo machine (U-13) | 7 | Verify early (CN-001 env script); keep PCAP demo as primary |
 | RK-6 | Results lower than Review-1's claimed range (U-08) | 4/10 | Report honestly with analysis; no tuning on test |
 | RK-7 | Scope creep | all | AGENTS.md scope rules; cut-lines above |
+
+**Note on CN-023 (Packet Tracer):** This task is supplementary for course demonstration and viva presentation. It does not block the core ML pipeline (Phases 1-10). If not manually implemented in Packet Tracer GUI, the project remains complete for core objectives.
