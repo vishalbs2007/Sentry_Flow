@@ -355,6 +355,26 @@ def save_run_artifacts(
         except Exception as e:
             logger.warning("Could not export feature importances: %s", e)
     
+    elif model_spec.name == 'xgboost':
+        try:
+            from models.xgboost_model import export_xgboost_info
+            xgb_classifier = pipeline.named_steps['classifier']
+            
+            # Get feature names after selection
+            feature_names_after_selection = selected_features_info.get('selected_features', [])
+            if feature_names_after_selection:
+                xgb_info = export_xgboost_info(xgb_classifier, feature_names_after_selection)
+                
+                with open(run_dir / 'feature_importances.json', 'w') as f:
+                    json.dump(xgb_info, f, indent=2)
+                
+                logger.info("Saved XGBoost info: %d features, %d estimators",
+                           xgb_info['n_features'], xgb_info['n_estimators'])
+            else:
+                logger.warning("Could not determine selected feature names for XGBoost export")
+        except Exception as e:
+            logger.warning("Could not export XGBoost info: %s", e)
+    
     # 11. SVM scalability note (if applicable)
     if scalability_note is not None:
         scalability_note_md = f"""# SVM Scalability Note (RID-06)
