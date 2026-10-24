@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowSentry - ML Network Traffic Classifier</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🛡️ FlowSentry</h1>
+            <p class="subtitle">ML-Based Network Traffic Classification</p>
+            <div class="header-info">
+                <span>📊 Flow-Level Statistical Features</span>
+                <span>🔒 No Payload Inspection</span>
+                <span>🤖 4 ML Models</span>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('overview')">📈 Overview</button>
+            <button class="tab-btn" onclick="showTab('dataset')">📁 Dataset</button>
+            <button class="tab-btn" onclick="showTab('models')">🤖 Models</button>
+            <button class="tab-btn" onclick="showTab('features')">🔍 Features</button>
+            <button class="tab-btn" onclick="showTab('network')">🌐 Network</button>
+        </nav>
+
+        <!-- Tab Contents -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="card">
+                <h2>📊 Project Overview</h2>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h3>🎯 Goal</h3>
+                        <p>Classify network traffic by flow behavior (timing, volume, patterns) WITHOUT inspecting packet payloads.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>🔬 Approach</h3>
+                        <ul>
+                            <li>Extract flow-level statistical features</li>
+                            <li>Train ML models on labeled dataset (ISCX-VPN2016)</li>
+                            <li>Classify into 4 categories: Web Browsing, VoIP, Streaming, File Transfer</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h3>📚 Models</h3>
+                        <ul>
+                            <li><strong>Decision Tree:</strong> Interpretable baseline</li>
+                            <li><strong>Random Forest:</strong> Ensemble of trees</li>
+                            <li><strong>SVM:</strong> Kernel method</li>
+                            <li><strong>XGBoost:</strong> Gradient boosting</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h3>🎓 Academic Project</h3>
+                        <p><strong>Course:</strong> Computer Networks<br>
+                        <strong>Team:</strong> Sudir Niranj R, Vishal B S<br>
+                        <strong>Phase:</strong> 3 (ML Training) Complete</p>
+                    </div>
+                </div>
+
+                <div class="pipeline-diagram">
+                    <h3>🔄 Classification Pipeline</h3>
+                    <div class="pipeline-steps">
+                        <div class="pipeline-step">📦 Packets</div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">🔀 5-Tuple Grouping</div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">📊 Flow Features</div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">🤖 ML Model</div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">🏷️ Class Label</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dataset-tab" class="tab-content">
+            <div class="card">
+                <h2>📁 Dataset Statistics</h2>
+                <div id="dataset-loading" class="loading">Loading dataset information...</div>
+                <div id="dataset-content" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-samples">-</div>
+                            <div class="stat-label">Total Samples</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="train-samples">-</div>
+                            <div class="stat-label">Training Samples</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="test-samples">-</div>
+                            <div class="stat-label">Test Samples</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="features-count">-</div>
+                            <div class="stat-label">Features</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="classes-count">-</div>
+                            <div class="stat-label">Classes</div>
+                        </div>
+                    </div>
+                    
+                    <h3>📊 Class Distribution</h3>
+                    <canvas id="classDistChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="models-tab" class="tab-content">
+            <div class="card">
+                <h2>🤖 Trained Models</h2>
+                <div id="models-loading" class="loading">Loading models...</div>
+                <div id="models-content" style="display: none;">
+                    <div id="models-table"></div>
+                    <br>
+                    <h3>📊 Model Comparison</h3>
+                    <canvas id="modelsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="features-tab" class="tab-content">
+            <div class="card">
+                <h2>🔍 Feature Importance</h2>
+                <p class="info-text">Random Forest feature importance analysis shows which flow characteristics are most predictive for traffic classification.</p>
+                <div id="features-loading" class="loading">Loading feature importance...</div>
+                <div id="features-content" style="display: none;">
+                    <canvas id="featuresChart"></canvas>
+                    <div class="insight-box">
+                        <strong>💡 Key Insight:</strong> Timing features (Inter-Arrival Times) dominate traffic classification. 
+                        Different application types have distinctive timing patterns that ML models can learn without inspecting packet contents.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="network-tab" class="tab-content">
+            <div class="card">
+                <h2>🌐 Network Topology & Packet Tracer</h2>
+                
+                <div class="info-box">
+                    <h3>🏗️ Cisco Packet Tracer Topology</h3>
+                    <p>The FlowSentry project includes a comprehensive Cisco Packet Tracer simulation demonstrating all four traffic classes in a realistic network environment.</p>
+                </div>
+
+                <div class="topology-info">
+                    <h3>📡 Network Architecture</h3>
+                    <div class="topology-grid">
+                        <div class="topology-item">
+                            <strong>Router:</strong> Cisco 2911<br>
+                            <small>Gateway between client and server networks</small>
+                        </div>
+                        <div class="topology-item">
+                            <strong>Switch:</strong> Cisco 2960-24TT<br>
+                            <small>Layer 2 switching for client connections</small>
+                        </div>
+                        <div class="topology-item">
+                            <strong>Clients:</strong> 4 PCs (10.0.0.10-13)<br>
+                            <small>Traffic generators for each class</small>
+                        </div>
+                        <div class="topology-item">
+                            <strong>Servers:</strong> 4 Servers (10.0.1.100-103)<br>
+                            <small>HTTP, SIP, RTSP, FTP services</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="traffic-scenarios">
+                    <h3>🔄 Traffic Classes Simulated</h3>
+                    <table class="traffic-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Service</th>
+                                <th>Port</th>
+                                <th>Duration</th>
+                                <th>Key Characteristics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🌐 Web Browsing</td>
+                                <td>HTTP</td>
+                                <td>80</td>
+                                <td>10-15s</td>
+                                <td>Bursty, request-response pattern</td>
+                            </tr>
+                            <tr>
+                                <td>📞 VoIP</td>
+                                <td>SIP/RTP</td>
+                                <td>5060/RTP</td>
+                                <td>20-30s</td>
+                                <td>Constant rate, small packets, low latency</td>
+                            </tr>
+                            <tr>
+                                <td>🎬 Streaming</td>
+                                <td>RTSP</td>
+                                <td>554</td>
+                                <td>30-45s</td>
+                                <td>Sustained throughput, buffer-based</td>
+                            </tr>
+                            <tr>
+                                <td>📁 File Transfer</td>
+                                <td>FTP</td>
+                                <td>21</td>
+                                <td>15-20s</td>
+                                <td>Bulk transfer, TCP window-based</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="quick-start">
+                    <h3>🚀 Quick Start Guide</h3>
+                    <ol>
+                        <li>Open <code>docs/packet_tracer_guide.md</code> for detailed instructions</li>
+                        <li>Open Cisco Packet Tracer and build the topology</li>
+                        <li>Configure services on all servers (HTTP, SIP, RTSP, FTP)</li>
+                        <li>Generate traffic from clients to servers</li>
+                        <li>Export PCAPs using Simulation Mode</li>
+                        <li>Classify with FlowSentry: <code>python -m inference.classify --pcap traffic.pcap</code></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>FlowSentry - ML-Based Network Traffic Classification | Computer Networks Project 2026</p>
+            <p>Team: Sudir Niranj R, Vishal B S</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
