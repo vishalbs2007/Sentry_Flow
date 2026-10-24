@@ -66,6 +66,7 @@ svm:
   # SVC(C, kernel, gamma, class_weight)
   # To be verified against sklearn 1.9.1 at CN-008
   # RID-06: May require stratified subsample for tuning due to scalability
+  subsample_fraction: 0.42  # ~20k samples from 47k (RID-06 scalability)
   param_space:
     classifier__C:
       - 0.1

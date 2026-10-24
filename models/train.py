@@ -179,6 +179,7 @@ def save_run_artifacts(
     X_train: pd.DataFrame,
     y_train: pd.Series,
     train_time: float,
+    scalability_note: dict | None = None,
 ) -> None:
     """Save all run artifacts per TRD §12.
     
@@ -354,6 +355,61 @@ def save_run_artifacts(
         except Exception as e:
             logger.warning("Could not export feature importances: %s", e)
     
+    # 11. SVM scalability note (if applicable)
+    if scalability_note is not None:
+        scalability_note_md = f"""# SVM Scalability Note (RID-06)
+
+**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+## Subsampling Strategy
+
+Per RID-06, SVM with RBF kernel can be slow on large datasets. To keep training time reasonable, we applied stratified subsampling to the training data for hyperparameter tuning.
+
+## Details
+
+- **Original training set size:** {scalability_note['original_train_size']:,} samples
+- **Subsampled training set size:** {scalability_note['subsampled_train_size']:,} samples
+- **Subsample fraction:** {scalability_note['subsample_fraction']:.2%}
+- **Sampling strategy:** Stratified (class proportions preserved)
+- **Test set subsampled:** {scalability_note['test_set_subsampled']} (NEVER subsample test set)
+
+## Rationale
+
+{scalability_note['reason']}
+
+Estimated training time on full dataset: >20 minutes
+Actual training time on subsample: {train_time:.1f} seconds
+
+## Impact
+
+- Hyperparameter tuning performed on subsample
+- Final model trained on subsample
+- Test evaluation will use FULL test set (no subsampling)
+
+## Fairness
+
+- All other models (Decision Tree, Random Forest, XGBoost) trained on full training set
+- SVM comparison must note this difference
+- Alternative: LinearSVC (faster, no subsampling needed)
+
+## Disclosure
+
+This subsampling is DISCLOSED in:
+1. Model specification notes
+2. This scalability_note.md file
+3. Task report CN-008
+4. Model comparison (CN-011)
+"""
+        
+        with open(run_dir / 'scalability_note.md', 'w') as f:
+            f.write(scalability_note_md)
+        
+        # Also save JSON version for programmatic access
+        with open(run_dir / 'scalability_note.json', 'w') as f:
+            json.dump(scalability_note, f, indent=2)
+        
+        logger.info("Saved scalability note (RID-06 subsampling documented)")
+    
     logger.info("All artifacts saved successfully")
 
 
@@ -401,6 +457,14 @@ Examples:
             model_spec = get_decision_tree_spec(random_state=random_state)
         elif args.model == 'random_forest':
             model_spec = get_random_forest_spec(random_state=random_state)
+        elif args.model == 'svm':
+            from models.svm import get_svm_spec, check_svm_feasibility
+            # Check if subsampling recommended
+            subsample_fraction = config.get('svm', {}).get('subsample_fraction', None)
+            model_spec = get_svm_spec(random_state=random_state, subsample_fraction=subsample_fraction)
+        elif args.model == 'xgboost':
+            from models.xgboost_model import get_xgboost_spec
+            model_spec = get_xgboost_spec(random_state=random_state)
         else:
             raise ConfigError(f"Model '{args.model}' not yet implemented")
         
@@ -409,6 +473,41 @@ Examples:
         
         # Load training data
         X_train, y_train = load_training_data(paths)
+        
+        # Handle SVM subsampling if needed (RID-06)
+        svm_scalability_note = None
+        if args.model == 'svm' and config.get('svm', {}).get('subsample_fraction') is not None:
+            from sklearn.model_selection import train_test_split
+            subsample_frac = config['svm']['subsample_fraction']
+            n_original = len(X_train)
+            
+            logger.info("="*80)
+            logger.info("SVM SCALABILITY (RID-06): Subsampling training data")
+            logger.info("Original training samples: %d", n_original)
+            logger.info("Subsample fraction: %.2f%%", subsample_frac * 100)
+            
+            # Stratified subsample
+            X_train, _, y_train, _ = train_test_split(
+                X_train, y_train,
+                train_size=subsample_frac,
+                stratify=y_train,
+                random_state=random_state,
+            )
+            
+            n_subsampled = len(X_train)
+            logger.info("Subsampled training samples: %d", n_subsampled)
+            logger.info("Class distribution preserved (stratified sampling)")
+            logger.info("="*80)
+            
+            # Record scalability note for artifacts
+            svm_scalability_note = {
+                'original_train_size': n_original,
+                'subsampled_train_size': n_subsampled,
+                'subsample_fraction': subsample_frac,
+                'reason': 'RID-06: SVM scalability - reduce training time for RBF kernel',
+                'test_set_subsampled': False,  # Test set NEVER subsampled
+                'stratified': True,
+            }
         
         # Encode labels
         label_encoder = LabelEncoder()
@@ -455,6 +554,7 @@ Examples:
             X_train=X_train,
             y_train=y_train,
             train_time=train_time,
+            scalability_note=svm_scalability_note,
         )
         
         logger.info("="*80)

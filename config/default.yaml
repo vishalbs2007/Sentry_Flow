@@ -44,7 +44,7 @@ feature_selection:
 
 svm:
   # RID-06: kernel SVM may be infeasible on full data; tune on a stratified subsample
-  subsample_fraction: 0.1     # fraction of training data used for SVM tuning/training
+  subsample_fraction: 0.42     # fraction of training data used for SVM tuning/training (~20k samples)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CICFlowMeter integration — TRD §22
