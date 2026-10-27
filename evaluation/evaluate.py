@@ -256,7 +256,9 @@ Examples:
         
         # Measure inference time
         logger.info("Measuring inference time...")
-        timing = measure_inference_time(pipeline, X_test)
+        # Use fewer iterations for slow models
+        n_iterations = 3 if train_info.get('model_name') == 'svm' else 10
+        timing = measure_inference_time(pipeline, X_test, n_iterations=n_iterations)
         
         # Save artifacts
         eval_dir = paths.reports_dir / args.run_id
