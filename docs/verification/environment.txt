@@ -1,26 +1,26 @@
 ========================================================================
 FlowSentry -- Environment Verification Report  (CN-001)
-Generated : 2026-10-10T00:53:32.133916
+Generated : 2026-10-28T10:23:43.207040
 ========================================================================
 
 -- Python Runtime ------------------------------------------------------
   python_version                 3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]
-  python_executable              D:\Sentry_Flow\.venv\Scripts\python.exe
-  platform                       Windows-11-10.0.26200-SP0
+  python_executable              C:\Users\ADMIN\AppData\Local\Python\pythoncore-3.14-64\python.exe
+  platform                       Windows-11-10.0.26300-SP0
   os                             Windows
   architecture                   AMD64
 
 -- Required Python Packages --------------------------------------------
-  [OK] pandas                 OK  3.0.6
+  [OK] pandas                 OK  3.1.0
   [OK] scikit-learn           OK  1.9.1
   [OK] xgboost                OK  3.4.1
-  [OK] scapy                  OK  2.8.0
+  [!!] scapy                  MISSING — install from requirements.txt
   [OK] PyYAML                 OK  6.0.3
   [OK] joblib                 OK  1.6.0
-  [OK] matplotlib             OK  3.11.2
-  [OK] pytest                 OK  9.1.1
+  [OK] matplotlib             OK  3.11.1
+  [OK] pytest                 OK  8.4.2
 
-  Overall package status: ALL OK
+  Overall package status: ONE OR MORE MISSING -- run: pip install -r requirements.txt
 
 -- External Tools ------------------------------------------------------
   (Optional for Phase 1; required for later phases as noted)
