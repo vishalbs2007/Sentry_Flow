@@ -38,35 +38,17 @@ Use this script for your viva/presentation. Everything shown here **actually wor
 cd D:\Sentry_Flow
 ```
 
-### Step 1: Show Model Comparison
+### Show Formatted Results Table
 
 ```powershell
-type artifacts\reports\comparison.csv
+powershell -ExecutionPolicy Bypass -File show_results.ps1
 ```
 
-**Say:**
-> "We trained and compared 4 different models: XGBoost, Decision Tree, Random Forest, and SVM. XGBoost performed best with 98.12% accuracy."
-
-**Point out:**
-- XGBoost: 98.12% accuracy
-- Decision Tree: 96.70% accuracy
-- Random Forest: 96.47% accuracy
-- SVM: 70.10% accuracy (on subset due to scalability)
-
-### Step 2: Show Detailed Classification Report
-
-```powershell
-type artifacts\reports\xgboost_20261024_124732\classification_report.txt
-```
-
-**Say:**
-> "Here's the detailed per-class performance. The model correctly identifies Web Browsing, VoIP, Streaming, and File Transfer traffic with high precision and recall across all classes."
-
-**Highlight:**
-- VoIP: 99.49% F1-score (nearly perfect!)
-- Web Browsing: 98.18% F1-score
-- File Transfer: 97.29% F1-score
-- Streaming: 93.69% F1-score
+**This will display:**
+- ✅ Model comparison table with percentages
+- ✅ XGBoost detailed metrics
+- ✅ Per-class F1 scores  
+- ✅ All properly formatted!
 
 ---
 
