@@ -53,13 +53,13 @@ $results | Group-Object True_Class | Sort-Object Name | ForEach-Object {
     $classAcc = $classCorrect / $classTotal
     
     Write-Host ("{0,-20}" -f $class) -NoNewline -ForegroundColor Cyan
-    Write-Host " {0,3}/{1,-3} " -f $classCorrect, $classTotal -NoNewline
+    Write-Host (" {0,3}/{1,-3} " -f $classCorrect, $classTotal) -NoNewline
     if ($classAcc -ge 0.95) {
-        Write-Host "({0:P1}) [EXCELLENT]" -f $classAcc -ForegroundColor Green
+        Write-Host ("({0:P1}) [EXCELLENT]" -f $classAcc) -ForegroundColor Green
     } elseif ($classAcc -ge 0.85) {
-        Write-Host "({0:P1}) [GOOD]" -f $classAcc -ForegroundColor Yellow
+        Write-Host ("({0:P1}) [GOOD]" -f $classAcc) -ForegroundColor Yellow
     } else {
-        Write-Host "({0:P1}) [NEEDS REVIEW]" -f $classAcc -ForegroundColor Red
+        Write-Host ("({0:P1}) [NEEDS REVIEW]" -f $classAcc) -ForegroundColor Red
     }
 }
 Write-Host ""
