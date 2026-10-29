@@ -28,10 +28,17 @@ Write-Host ""
 
 # Create classification script
 $pythonScript = @"
+import sys
+import os
+
+# Add project root to Python path so pickle can find modules like 'preprocessing'
+project_root = os.path.abspath('.')  # Current directory is project root
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import pandas as pd
 import joblib
 import numpy as np
-import sys
 
 print('=' * 80)
 print('CLASSIFICATION IN PROGRESS')
