@@ -122,7 +122,7 @@ def run_test():
     print("\nFor full classification demo:")
     print("  1. Use flowsentry.tcl to generate 60 seconds of traffic")
     print("  2. Or run: powershell simulation\\ns2\\run_ns2.ps1 -SkipNS2")
-    print("\nNext: Read NS2_INTEGRATION_GUIDE.md for full details")
+    print("\nNext: Read DEMO_SETUP_GUIDE.md for full details")
     print()
     
     return True

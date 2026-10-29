@@ -23,12 +23,11 @@ A fully working ML pipeline that demonstrates:
 - ~30 seconds duration
 - Same content, no interaction needed
 
-### 3. DEMO_README.md
-- Complete documentation
-- Usage instructions
-- Expected results
-- Troubleshooting guide
-- Presentation script
+### 3. README.md and DEMO_SETUP_GUIDE.md
+- Complete project documentation
+- Setup and usage instructions
+- Expected results and limitations
+- Troubleshooting and presentation script
 
 ## Key Achievements
 
@@ -119,7 +118,7 @@ Results (demo_results.csv)
 - `tr_to_pcap.py` - Converts NS2 trace files to PCAP
 - `simulation/ns2/run_ns2.ps1` - Windows automation
 - `simulation/ns2/validate.py` - Validation tool
-- NS2_INTEGRATION_GUIDE.md - Complete documentation
+- `DEMO_SETUP_GUIDE.md` - Complete documentation
 
 ### ⚠️ Known Limitation
 - Scapy fallback provides 25 simplified features
@@ -133,7 +132,8 @@ Results (demo_results.csv)
 📁 Project Root
 ├── COMPLETE_DEMO.ps1              # Interactive demo
 ├── COMPLETE_DEMO_AUTO.ps1         # Automated demo
-├── DEMO_README.md                 # Usage documentation
+├── README.md                      # Project documentation
+├── DEMO_SETUP_GUIDE.md            # Demo setup documentation
 ├── DEMO_SUMMARY.md                # This file
 │
 📁 artifacts/
@@ -236,9 +236,9 @@ OVERALL ACCURACY:
 7. Summarize key metrics
 
 ### For Documentation
-1. Show DEMO_README.md
+1. Show README.md
 2. Walk through Quick Start
-3. Reference NS2_INTEGRATION_GUIDE.md
+3. Reference DEMO_SETUP_GUIDE.md
 4. Point to SOLUTION.md for full details
 
 ### For Technical Review

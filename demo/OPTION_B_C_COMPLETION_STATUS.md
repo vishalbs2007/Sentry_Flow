@@ -285,7 +285,7 @@ pytest tests/integration/test_pcap_flow_extraction.py -m requires_cicflowmeter -
 ### Documentation Files (5):
 8. `docs/task_reports/CN-013.md` (updated)
 9. `docs/task_reports/CN-014.md`
-10. `COMPLETION_GUIDE.md`
+10. `../DEMO_SETUP_GUIDE.md`
 11. `OPTION_B_C_COMPLETION_STATUS.md` (this file)
 
 **Total Lines of Code:** ~2,500 lines (code + tests + docs)

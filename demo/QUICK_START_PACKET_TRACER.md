@@ -108,7 +108,7 @@ Connect with Copper Straight-Through:
 
 - **Detailed Setup:** `docs/PACKET_TRACER_DEMO.md`
 - **Topology Reference:** `docs/NETWORK_TOPOLOGY.md`
-- **Original Guide:** `docs/packet_tracer_guide.md`
+- **Project Guide:** `../DEMO_SETUP_GUIDE.md`
 
 ---
 
@@ -154,6 +154,6 @@ python -m dashboard.app
 **Need Help?**
 - Full guide: `docs/PACKET_TRACER_DEMO.md`
 - Network details: `docs/NETWORK_TOPOLOGY.md`
-- Cisco guide: `docs/packet_tracer_guide.md`
+- Project guide: `../DEMO_SETUP_GUIDE.md`
 
 **Good luck! 🎓🚀**

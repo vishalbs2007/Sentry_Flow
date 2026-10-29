@@ -307,7 +307,7 @@ def main() -> None:
         if not entries:
             logger.warning(
                 "No dataset files found. Task CN-002 is BLOCKED until datasets are "
-                "placed in %s. See data/README.md for instructions.",
+                "placed in %s. See README.md for dataset instructions.",
                 args.raw_dir.resolve(),
             )
             # Still write an empty manifest so the file exists
@@ -320,7 +320,7 @@ def main() -> None:
             print("\nNext steps:")
             print("  1. Download ISCX-VPN2016 and/or CIC-IDS2017 datasets")
             print(f"  2. Place them in {args.raw_dir.resolve()}/")
-            print("  3. Update data/README.md with source, licence, version")
+            print("  3. Record the source, licence, and version as described in README.md")
             print("  4. Re-run: python -m preprocessing.ingest")
             print("=" * 72)
         else:

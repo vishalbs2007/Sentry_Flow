@@ -36,7 +36,7 @@ I created 3 guides for you:
 - Demo scenarios
 - Viva Q&A prep
 
-### 2. **NS2_INTEGRATION_GUIDE.md** 📖 (Full Details)
+### 2. **../DEMO_SETUP_GUIDE.md** 📖 (Full Details)
 - What is NS2 and why use it
 - How each traffic type works
 - Complete pipeline explanation
@@ -58,7 +58,7 @@ Your Project Root:
 ├── flowsentry.tcl                    ← NS2 simulation (you added this)
 ├── tr_to_pcap.py                     ← NS2-to-PCAP converter (you added this)
 ├── test_ns2_integration.py           ← Quick test script (NEW!)
-├── NS2_INTEGRATION_GUIDE.md          ← Complete guide (NEW!)
+├── ../DEMO_SETUP_GUIDE.md            ← Complete guide
 ├── NS2_QUICK_START.md                ← Quick reference (NEW!)
 │
 └── simulation/
@@ -305,7 +305,7 @@ python test_ns2_integration.py
 
 # Read the guides
 # - NS2_QUICK_START.md (start here)
-# - NS2_INTEGRATION_GUIDE.md (full details)
+# - ../DEMO_SETUP_GUIDE.md (full details)
 ```
 
 ### For Your Viva:
@@ -361,7 +361,7 @@ Start Here:
     └── Demo scenarios
 
 Need More Details?
-└── NS2_INTEGRATION_GUIDE.md
+└── ../DEMO_SETUP_GUIDE.md
     ├── What is NS2 (detailed)
     ├── Traffic models explanation
     ├── Complete pipeline breakdown
@@ -373,7 +373,7 @@ Want to Run It?
 └── simulation/ns2/validate.py (check accuracy)
 
 Main Project Guide:
-└── EASY_COMPLETE_GUIDE.md (complete project setup)
+└── ../README.md (complete project overview)
 ```
 
 ---

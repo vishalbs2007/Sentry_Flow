@@ -94,7 +94,7 @@ type artifacts\results\summary.txt
 - `README.md` - Project overview
 - `docs/task_reports/` - Task completion reports
 - `docs/verification/` - Verification outputs
-- `NPCAP_AND_PACKET_TRACER_GUIDE.md` - Setup guide
+- `../DEMO_SETUP_GUIDE.md` - Setup guide
 
 ---
 
@@ -307,7 +307,7 @@ Sentry_Flow/
 - **Npcap Download:** https://npcap.com/#download
 - **Cisco Packet Tracer:** https://www.netacad.com/courses/packet-tracer
 - **Project Documentation:** `README.md`
-- **Setup Guide:** `NPCAP_AND_PACKET_TRACER_GUIDE.md`
+- **Setup Guide:** `../DEMO_SETUP_GUIDE.md`
 - **Task Reports:** `docs/task_reports/`
 
 ---

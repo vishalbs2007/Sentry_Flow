@@ -321,7 +321,7 @@ python -m dashboard.app
 
 ### 5. Cisco Packet Tracer (Manual Build)
 
-**Follow:** `COMPLETE_DEMONSTRATION_GUIDE.md` Part 2 (2 hours)
+**Follow:** `../DEMO_SETUP_GUIDE.md`
 
 **Build:**
 - Router configuration
@@ -371,8 +371,8 @@ d:\Sentry_Flow\
 │   ├── DEMO.md
 │   └── FINAL_REPORT_INPUTS.md
 │
-├── COMPLETE_DEMONSTRATION_GUIDE.md (800 lines)
-├── READ_ME_FIRST.md
+├── ../DEMO_SETUP_GUIDE.md
+├── ../README.md
 ├── PROJECT_100_PERCENT_COMPLETE.md ← YOU ARE HERE
 ├── README.md (updated to 100%)
 └── ... (15+ more guides)
@@ -429,7 +429,7 @@ python -m dashboard.app
 
 ### Full Demo (30 minutes)
 
-**Follow:** `COMPLETE_DEMONSTRATION_GUIDE.md` Part 6
+**Follow:** Stage 6 of `../DEMO_SETUP_GUIDE.md`
 
 **Sections:**
 1. Introduction (3 min)
@@ -531,7 +531,7 @@ python -m inference.realtime_classifier --window 10
    ```
 
 2. **Generate Traffic (Packet Tracer):**
-   - Follow `COMPLETE_DEMONSTRATION_GUIDE.md` Part 2
+   - Follow `../DEMO_SETUP_GUIDE.md`
    - Build network (2 hours)
    - Generate traffic
 

@@ -287,7 +287,7 @@ python scripts\simple_scapy_test.py
 - [ ] Enable services (HTTP on Server-Web, FTP on Server-FTP)
 - [ ] Save topology: `flowsentry_topology.pkt`
 
-**Detailed Guide:** Follow `NPCAP_AND_PACKET_TRACER_GUIDE.md` Phase 1-7
+**Detailed Guide:** Follow `../DEMO_SETUP_GUIDE.md`
 
 **After This:**
 - ✅ Visual network demonstration ready
@@ -396,7 +396,7 @@ python scripts\simple_scapy_test.py
 - [x] AGENTS.md (Agent rules)
 
 ### Setup Guides
-- [x] NPCAP_AND_PACKET_TRACER_GUIDE.md (this guide)
+- [x] `../DEMO_SETUP_GUIDE.md`
 - [x] QUICK_START_PACKET_TRACER.md (30-min quick start)
 - [x] PACKET_TRACER_DEMO.md (90-min comprehensive)
 - [x] QUICK_REFERENCE.md (command reference)
@@ -568,7 +568,7 @@ python scripts\simple_scapy_test.py
 2. Run installer as Administrator
 3. Uninstall old WinPcap first (if installed)
 4. Restart computer after installation
-5. Check error message and search in `NPCAP_AND_PACKET_TRACER_GUIDE.md`
+5. Check the error message and search in `../DEMO_SETUP_GUIDE.md`
 
 ### If PCAP Classification Fails
 1. Verify Npcap: `python scripts\verify_cicflowmeter.py`
@@ -581,7 +581,7 @@ python scripts\simple_scapy_test.py
 1. Verify all IPs configured correctly
 2. Check router interface status: `show ip interface brief`
 3. Test connectivity with ping
-4. Review `NPCAP_AND_PACKET_TRACER_GUIDE.md` troubleshooting section
+4. Review the troubleshooting section in `../DEMO_SETUP_GUIDE.md`
 
 ---
 

@@ -161,7 +161,7 @@ def test_preprocessing_to_training_integration(temp_project_dir):
     from sklearn.pipeline import Pipeline
     pipeline = Pipeline([
         ('preprocessor', preprocessor),
-        ('classifier', model_spec.estimator),
+        ('classifier', model_spec.estimator_factory()),
     ])
     
     # Fit pipeline (minimal CV for speed)
@@ -208,7 +208,7 @@ def test_training_to_evaluation_integration(temp_project_dir):
     from sklearn.pipeline import Pipeline
     pipeline = Pipeline([
         ('preprocessor', preprocessor),
-        ('classifier', model_spec.estimator),
+        ('classifier', model_spec.estimator_factory()),
     ])
     
     pipeline.fit(X_train, y_train_encoded)
@@ -243,7 +243,7 @@ def test_training_to_evaluation_integration(temp_project_dir):
     assert len(metrics['per_class']) == len(label_encoder.classes_)
 
 
-def test_evaluation_to_registry_integration(temp_project_dir):
+def test_evaluation_to_registry_integration(temp_project_dir, monkeypatch):
     """Test evaluation → model registry pipeline."""
     import pandas as pd
     from sklearn.preprocessing import LabelEncoder
@@ -267,7 +267,7 @@ def test_evaluation_to_registry_integration(temp_project_dir):
     from sklearn.pipeline import Pipeline
     pipeline = Pipeline([
         ('preprocessor', preprocessor),
-        ('classifier', model_spec.estimator),
+        ('classifier', model_spec.estimator_factory()),
     ])
     
     pipeline.fit(X_train, y_train_encoded)
@@ -298,30 +298,42 @@ def test_evaluation_to_registry_integration(temp_project_dir):
     
     with open(run_dir / 'metrics_cv.json', 'w') as f:
         json.dump(metrics_cv, f)
+
+    with open(run_dir / 'selected_features.json', 'w') as f:
+        json.dump({'features': list(X_train.columns)}, f)
+
+    (run_dir / 'label_mapping.sha256').write_text('synthetic-test-hash')
+
+    report_dir = temp_project_dir / 'artifacts' / 'reports' / run_id
+    report_dir.mkdir(parents=True)
     
     # Register model
     registry_dir = temp_project_dir / 'artifacts' / 'registry'
     
-    model_id = register_model(
-        run_id=run_id,
-        model_name='Test Decision Tree',
-        runs_dir=temp_project_dir / 'artifacts' / 'runs',
-        registry_dir=registry_dir,
-        feature_schema_path=temp_project_dir / 'config' / 'feature_schema.yaml',
-        label_mapping_path=temp_project_dir / 'config' / 'label_mapping.yaml',
-    )
+    class MockPaths:
+        def __init__(self, config):
+            self.runs_dir = temp_project_dir / 'artifacts' / 'runs'
+            self.reports_dir = temp_project_dir / 'artifacts' / 'reports'
+            self.registry_dir = registry_dir
+
+    monkeypatch.setattr('models.registry.ProjectPaths', MockPaths)
+    monkeypatch.chdir(temp_project_dir)
+
+    model_dir = register_model(run_id, 'Test Decision Tree')
     
     # Check registry entry created
-    assert model_id is not None
-    assert (registry_dir / model_id).exists()
-    assert (registry_dir / model_id / 'pipeline.joblib').exists()
-    assert (registry_dir / model_id / 'metadata.json').exists()
+    assert model_dir == registry_dir / run_id
+    assert (model_dir / 'pipeline.joblib').exists()
+    assert (model_dir / 'metadata.json').exists()
     
     # Load model from registry
-    loaded_pipeline, metadata = load_model(
-        registry_dir=registry_dir,
-        model_id=model_id,
-    )
+    loaded_pipeline, metadata, feature_schema, loaded_encoder = load_model(run_id)
+
+    assert metadata['model_id'] == run_id
+    assert metadata['selected_features'] == list(X_train.columns)
+    assert feature_schema['features']
+    assert loaded_encoder is not None
+    assert loaded_encoder.classes_.tolist() == label_encoder.classes_.tolist()
     
     # Check loaded pipeline works
     y_pred = loaded_pipeline.predict(X_train)
@@ -382,7 +394,7 @@ def test_leakage_guard_models_cannot_import_test_loader():
         pytest.fail(f"Failed to import models modules: {e}")
 
 
-def test_registry_to_predictor_integration(temp_project_dir):
+def test_registry_to_predictor_integration(temp_project_dir, monkeypatch):
     """Test model registry → predictor pipeline."""
     import pandas as pd
     from sklearn.preprocessing import LabelEncoder
@@ -406,7 +418,7 @@ def test_registry_to_predictor_integration(temp_project_dir):
     from sklearn.pipeline import Pipeline
     pipeline = Pipeline([
         ('preprocessor', preprocessor),
-        ('classifier', model_spec.estimator),
+        ('classifier', model_spec.estimator_factory()),
     ])
     
     pipeline.fit(X_train, y_train_encoded)
@@ -431,23 +443,36 @@ def test_registry_to_predictor_integration(temp_project_dir):
     
     with open(run_dir / 'metrics_cv.json', 'w') as f:
         json.dump({'best_score': 0.8, 'best_params': {}}, f)
+
+    with open(run_dir / 'selected_features.json', 'w') as f:
+        json.dump({'features': list(X_train.columns)}, f)
+
+    (run_dir / 'label_mapping.sha256').write_text('synthetic-test-hash')
+
+    report_dir = temp_project_dir / 'artifacts' / 'reports' / run_id
+    report_dir.mkdir(parents=True)
     
     registry_dir = temp_project_dir / 'artifacts' / 'registry'
     
-    model_id = register_model(
-        run_id=run_id,
-        model_name='Test Predictor Model',
-        runs_dir=temp_project_dir / 'artifacts' / 'runs',
-        registry_dir=registry_dir,
-        feature_schema_path=temp_project_dir / 'config' / 'feature_schema.yaml',
-        label_mapping_path=temp_project_dir / 'config' / 'label_mapping.yaml',
-    )
+    class MockPaths:
+        def __init__(self, config):
+            self.runs_dir = temp_project_dir / 'artifacts' / 'runs'
+            self.reports_dir = temp_project_dir / 'artifacts' / 'reports'
+            self.registry_dir = registry_dir
+
+    monkeypatch.setattr('models.registry.ProjectPaths', MockPaths)
+    monkeypatch.chdir(temp_project_dir)
+
+    model_dir = register_model(run_id, 'Test Predictor Model')
     
     # Load model from registry (simulating predictor)
-    loaded_pipeline, metadata = load_model(
-        registry_dir=registry_dir,
-        model_id=model_id,
-    )
+    loaded_pipeline, metadata, feature_schema, loaded_encoder = load_model(run_id)
+
+    assert metadata['model_id'] == run_id
+    assert metadata['selected_features'] == list(X_train.columns)
+    assert feature_schema['features']
+    assert loaded_encoder is not None
+    assert loaded_encoder.classes_.tolist() == label_encoder.classes_.tolist()
     
     # Create new data for prediction
     test_path = temp_project_dir / 'data' / 'processed' / 'test' / 'test.csv'
@@ -462,7 +487,7 @@ def test_registry_to_predictor_integration(temp_project_dir):
     assert all(0 <= p < len(label_encoder.classes_) for p in predictions)
     
     # Check we can decode predictions
-    class_names = label_encoder.classes_
-    pred_labels = [class_names[p] for p in predictions]
+    class_names = loaded_encoder.classes_
+    pred_labels = loaded_encoder.inverse_transform(predictions)
     
     assert all(label in class_names for label in pred_labels)

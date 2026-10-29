@@ -305,6 +305,13 @@ def demo_project_overview():
 
 def main():
     """Run FlowSentry demo."""
+    # Windows subprocess pipes can default to CP1252, which cannot encode the
+    # Unicode symbols used by this presentation script.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
     try:
         # Load config
         config = load_config('config/default.yaml')
@@ -353,7 +360,7 @@ def main():
       python -m evaluation.compare
 
    4. Classify PCAPs:
-      python -m inference.classify --pcap <file.pcap>
+      python -m inference.pcap_classifier --pcap <file.pcap>
 
 🎓 For Viva Demonstration:
 
@@ -363,7 +370,7 @@ def main():
    • Run FlowSentry classification
    • Display results in dashboard
 
-📚 Documentation: See files/README.md, files/PRD.md, files/TRD.md
+📚 Documentation: See README.md and DEMO_SETUP_GUIDE.md
         """)
         
         print("=" * 80)

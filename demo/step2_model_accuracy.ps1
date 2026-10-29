@@ -21,17 +21,19 @@ if (Test-Path "artifacts\reports\comparison.csv") {
     $results = Import-Csv "artifacts\reports\comparison.csv"
     $formatted = $results | Select-Object `
         @{Name="Model"; Expression={$_.model_name.ToUpper()}},
+        @{Name="CV Macro F1"; Expression={"{0:P2}" -f [double]$_.cv_macro_f1}},
         @{Name="Accuracy"; Expression={"{0:P2}" -f [double]$_.test_accuracy}},
         @{Name="Macro F1"; Expression={"{0:P2}" -f [double]$_.test_macro_f1}},
-        @{Name="Precision"; Expression={"{0:P2}" -f [double]$_.test_precision}},
-        @{Name="Recall"; Expression={"{0:P2}" -f [double]$_.test_recall}}
+        @{Name="Precision"; Expression={"{0:P2}" -f [double]$_.test_macro_precision}},
+        @{Name="Recall"; Expression={"{0:P2}" -f [double]$_.test_macro_recall}}
 
     $formatted | Format-Table -AutoSize
     
     # Highlight best model
-    $best = $results | Sort-Object -Property test_accuracy -Descending | Select-Object -First 1
+    $best = $results | Sort-Object -Property cv_macro_f1 -Descending | Select-Object -First 1
     Write-Host "[WINNER] " -NoNewline -ForegroundColor Green
-    Write-Host "$($best.model_name.ToUpper()) selected with $([double]$best.test_accuracy * 100)% accuracy" -ForegroundColor White
+    Write-Host "$($best.model_name.ToUpper()) selected with $([double]$best.cv_macro_f1 * 100)% CV Macro F1" -ForegroundColor White
+    Write-Host "         Held-out test accuracy: $([double]$best.test_accuracy * 100)%" -ForegroundColor Gray
     Write-Host ""
     
     # Show per-class performance

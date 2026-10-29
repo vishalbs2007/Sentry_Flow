@@ -11,10 +11,11 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 import subprocess
+import sys
 import pandas as pd
 
 from flow.cicflowmeter_adapter import CICFlowMeterAdapter
-from common.errors import FlowExtractionError
+from common.errors import ExtractionError
 
 
 class TestCICFlowMeterAdapter:
@@ -56,7 +57,7 @@ class TestCICFlowMeterAdapter:
         adapter = CICFlowMeterAdapter()
         
         # Should use python -m
-        assert adapter.command == [pytest.mock.ANY, "-m", "cicflowmeter"]
+        assert adapter.command == [sys.executable, "-m", "cicflowmeter"]
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
     @patch('flow.cicflowmeter_adapter.Path.exists')
@@ -67,7 +68,7 @@ class TestCICFlowMeterAdapter:
         # Mock --help fails
         mock_run.return_value = Mock(returncode=1, stderr="Error", stdout="")
         
-        with pytest.raises(FlowExtractionError, match="returned non-zero"):
+        with pytest.raises(ExtractionError, match="returned non-zero"):
             CICFlowMeterAdapter()
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
@@ -79,26 +80,20 @@ class TestCICFlowMeterAdapter:
         # Mock --help times out
         mock_run.side_effect = subprocess.TimeoutExpired(cmd="test", timeout=10)
         
-        with pytest.raises(FlowExtractionError, match="timed out"):
+        with pytest.raises(ExtractionError, match="timed out"):
             CICFlowMeterAdapter()
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
-    @patch('flow.cicflowmeter_adapter.Path.exists')
     @patch('flow.cicflowmeter_adapter.pd.read_csv')
-    def test_extract_flows_success(self, mock_read_csv, mock_path_exists, mock_run):
+    def test_extract_flows_success(self, mock_read_csv, mock_run, tmp_path):
         """Test successful flow extraction."""
-        # Mock adapter initialization
-        def exists_side_effect(path=None):
-            # .exe exists, PCAP exists, output exists
-            return True
-        mock_path_exists.side_effect = exists_side_effect
-        
         # Mock --help succeeds
         # Mock extraction succeeds
         def run_side_effect(cmd, *args, **kwargs):
             if "--help" in cmd:
                 return Mock(returncode=0, stderr="", stdout="")
             elif "-f" in cmd:
+                Path(cmd[cmd.index("-c") + 1]).touch()
                 return Mock(returncode=0, stderr="", stdout="Extraction complete")
             raise Exception(f"Unexpected command: {cmd}")
         
@@ -108,11 +103,13 @@ class TestCICFlowMeterAdapter:
         mock_df = pd.DataFrame({'flow_id': [1, 2], 'src_ip': ['1.1.1.1', '2.2.2.2']})
         mock_read_csv.return_value = mock_df
         
-        adapter = CICFlowMeterAdapter()
+        adapter = CICFlowMeterAdapter(command_path="cicflowmeter")
         
         # Extract flows
-        pcap_path = Path("test.pcap")
-        result = adapter.extract_flows(pcap_path)
+        pcap_path = tmp_path / "test.pcap"
+        pcap_path.touch()
+        output_path = tmp_path / "flows.csv"
+        result = adapter.extract_flows(pcap_path, output_path)
         
         # Should return DataFrame
         assert isinstance(result, pd.DataFrame)
@@ -121,18 +118,20 @@ class TestCICFlowMeterAdapter:
         # Should have called subprocess with correct args
         extraction_call = [call for call in mock_run.call_args_list if "-f" in call[0][0]]
         assert len(extraction_call) == 1
-        assert "-f" in extraction_call[0][0][0]
-        assert "-c" in extraction_call[0][0][0]
+        assert extraction_call[0].args[0] == [
+            "cicflowmeter",
+            "-f",
+            str(pcap_path),
+            "-c",
+            str(output_path),
+        ]
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
-    @patch('flow.cicflowmeter_adapter.Path.exists')
-    def test_extract_flows_handles_npcap_error(self, mock_path_exists, mock_run):
-        """Test extraction detects Npcap missing error."""
-        # Mock initialization
-        def exists_side_effect(path=None):
-            return True
-        mock_path_exists.side_effect = exists_side_effect
-        
+    @patch('flow.scapy_extractor.ScapyFlowExtractor.extract')
+    def test_extract_flows_falls_back_when_tcpdump_missing(
+        self, mock_scapy_extract, mock_run, tmp_path
+    ):
+        """Test missing tcpdump triggers the Scapy fallback."""
         # Mock extraction fails with Npcap error
         def run_side_effect(cmd, *args, **kwargs):
             if "--help" in cmd:
@@ -146,21 +145,24 @@ class TestCICFlowMeterAdapter:
             raise Exception(f"Unexpected command")
         
         mock_run.side_effect = run_side_effect
-        
-        adapter = CICFlowMeterAdapter()
-        
-        pcap_path = Path("test.pcap")
-        
-        with pytest.raises(FlowExtractionError, match="Npcap"):
-            adapter.extract_flows(pcap_path)
+
+        def scapy_side_effect(pcap_path, output_dir):
+            csv_path = output_dir / "flows.csv"
+            csv_path.write_text("flow_id\n1\n", encoding="utf-8")
+            return csv_path
+
+        mock_scapy_extract.side_effect = scapy_side_effect
+        adapter = CICFlowMeterAdapter(command_path="cicflowmeter")
+        pcap_path = tmp_path / "test.pcap"
+        pcap_path.touch()
+
+        result = adapter.extract_flows(pcap_path)
+
+        assert result["flow_id"].tolist() == [1]
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
-    @patch('flow.cicflowmeter_adapter.Path.exists')
-    def test_extract_flows_handles_timeout(self, mock_path_exists, mock_run):
+    def test_extract_flows_handles_timeout(self, mock_run, tmp_path):
         """Test extraction handles timeout."""
-        # Mock initialization
-        mock_path_exists.return_value = True
-        
         # Mock extraction times out
         def run_side_effect(cmd, *args, **kwargs):
             if "--help" in cmd:
@@ -171,34 +173,21 @@ class TestCICFlowMeterAdapter:
         
         mock_run.side_effect = run_side_effect
         
-        adapter = CICFlowMeterAdapter(timeout=300)
+        adapter = CICFlowMeterAdapter(command_path="cicflowmeter", timeout=300)
+        pcap_path = tmp_path / "test.pcap"
+        pcap_path.touch()
         
-        pcap_path = Path("test.pcap")
-        
-        with pytest.raises(FlowExtractionError, match="timed out after 300s"):
+        with pytest.raises(ExtractionError, match="timed out after 300s"):
             adapter.extract_flows(pcap_path)
     
     @patch('flow.cicflowmeter_adapter.subprocess.run')
-    @patch('flow.cicflowmeter_adapter.Path.exists')
-    def test_extract_flows_file_not_found(self, mock_path_exists, mock_run):
+    def test_extract_flows_file_not_found(self, mock_run, tmp_path):
         """Test extraction raises FileNotFoundError for missing PCAP."""
-        # Mock initialization (adapter exists)
-        call_count = [0]
-        
-        def exists_side_effect(path=None):
-            call_count[0] += 1
-            if call_count[0] <= 2:  # First 2 calls are for initialization
-                return True
-            return False  # PCAP doesn't exist
-        
-        mock_path_exists.side_effect = exists_side_effect
-        
         # Mock --help succeeds
         mock_run.return_value = Mock(returncode=0, stderr="", stdout="")
         
-        adapter = CICFlowMeterAdapter()
-        
-        pcap_path = Path("nonexistent.pcap")
+        adapter = CICFlowMeterAdapter(command_path="cicflowmeter")
+        pcap_path = tmp_path / "nonexistent.pcap"
         
         with pytest.raises(FileNotFoundError, match="not found"):
             adapter.extract_flows(pcap_path)

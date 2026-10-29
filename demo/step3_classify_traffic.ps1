@@ -117,7 +117,7 @@ print()
 # Show sample predictions
 print('SAMPLE PREDICTIONS (First 10):')
 print('-' * 80)
-print(f'{'True Class':<20} {'Predicted':<20} {'Result':<10} {'Confidence':<12}')
+print(f"{'True Class':<20} {'Predicted':<20} {'Result':<10} {'Confidence':<12}")
 print('-' * 80)
 for i in range(min(10, len(y_pred))):
     true_cls = reverse_mapping[y_true[i]]

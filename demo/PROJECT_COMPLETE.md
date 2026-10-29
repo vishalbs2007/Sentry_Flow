@@ -161,7 +161,7 @@
 6. `BUILD_PLAN.md` - Build phases
 
 **Setup & Demo:**
-7. **`COMPLETE_DEMONSTRATION_GUIDE.md`** (800 lines) ⭐
+7. **`../DEMO_SETUP_GUIDE.md`** ⭐
    - Complete setup instructions
    - Cisco Packet Tracer tutorial (2 hours)
    - Traffic generation procedures
@@ -173,7 +173,7 @@
 11. `COMPLETION_CHECKLIST.md` - Progress tracking
 
 **Technical Guides:**
-12. `NPCAP_AND_PACKET_TRACER_GUIDE.md` (600 lines)
+12. `../README.md`
 13. `WINDUMP_SOLUTION.md` - WinDump setup (optional)
 14. `PACKET_TRACER_DEMO.md` - 90-min PT guide
 15. `QUICK_START_PACKET_TRACER.md` - 30-min PT guide
@@ -228,7 +228,7 @@ python scripts\simple_scapy_test.py
 
 ### Full Demonstration (30 minutes)
 
-**Follow:** `COMPLETE_DEMONSTRATION_GUIDE.md`
+**Follow:** `../DEMO_SETUP_GUIDE.md`
 
 **Sections:**
 1. **Introduction** (3 min) - Project overview
@@ -357,14 +357,14 @@ pytest tests/ -v --tb=short
 
 **3. Prepare Files (1 min):**
 - Have PowerShell open to `d:\Sentry_Flow`
-- Have `COMPLETE_DEMONSTRATION_GUIDE.md` open
+- Have `../DEMO_SETUP_GUIDE.md` open
 - Have browser ready for dashboard
 
 ---
 
 ### During Demonstration
 
-**Follow:** Section 6 of `COMPLETE_DEMONSTRATION_GUIDE.md`
+**Follow:** Stage 6 of `../DEMO_SETUP_GUIDE.md`
 
 **Key Points to Emphasize:**
 1. **Flow-based classification** (not payload)
@@ -516,7 +516,7 @@ ftp 10.0.1.103
 
 | File | Purpose |
 |------|---------|
-| **`COMPLETE_DEMONSTRATION_GUIDE.md`** | **Main demonstration guide** |
+| **`../DEMO_SETUP_GUIDE.md`** | **Main demonstration guide** |
 | `START_HERE.md` | Quick start (2 min) |
 | `README.md` | Project overview |
 | `QUICK_REFERENCE.md` | Command cheat sheet |
@@ -527,7 +527,7 @@ ftp 10.0.1.103
 
 ## 🎯 Next Step
 
-**Read:** `COMPLETE_DEMONSTRATION_GUIDE.md`
+**Read:** `../DEMO_SETUP_GUIDE.md`
 
 This 800-line guide has:
 - Complete environment setup

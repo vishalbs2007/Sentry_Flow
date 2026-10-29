@@ -388,5 +388,5 @@ pytest tests/integration/test_pcap_flow_extraction.py -v
 
 - **Scapy extractor docs:** `flow/scapy_extractor.py` (see docstrings)
 - **Test scripts:** `scripts/simple_scapy_test.py`
-- **Full guide:** `NPCAP_AND_PACKET_TRACER_GUIDE.md`
+- **Full guide:** `../DEMO_SETUP_GUIDE.md`
 - **Quick reference:** `QUICK_REFERENCE.md`

@@ -11,6 +11,9 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import pandas as pd
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from common.config import load_config

@@ -110,8 +110,7 @@ Get-ChildItem -Path . -Include *.md | Select-Object Name | Format-Table
 ```
 
 **Highlight:**
-- EASY_COMPLETE_GUIDE.md - Complete setup guide
-- NS2_INTEGRATION_GUIDE.md - NS2 documentation (838 lines)
+- ../DEMO_SETUP_GUIDE.md - Complete setup and NS-2 documentation
 - TROUBLESHOOTING.md - Comprehensive troubleshooting
 - README.md - Project overview
 

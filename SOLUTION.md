@@ -133,7 +133,7 @@ python -m inference.pcap_classifier --pcap data/sample/test_traffic.pcap --outpu
 
 ### Option 2: Explain Architecture
 **Show diagrams from:**
-- NS2_INTEGRATION_GUIDE.md
+- DEMO_SETUP_GUIDE.md
 - TRD.md (Technical Requirements)
 - README.md (Pipeline overview)
 
@@ -229,7 +229,7 @@ Write-Host "✓ Professional engineering: Demonstrated" -ForegroundColor White
 - **test_ns2_integration.py** - NS2 demonstration
 - **TROUBLESHOOTING.md** - Complete troubleshooting guide
 - **DEMO_SCRIPT.md** - 5-minute demo script
-- **NS2_INTEGRATION_GUIDE.md** - Technical details
+- **DEMO_SETUP_GUIDE.md** - Complete NS-2 and demo setup
 
 ---
 

@@ -35,7 +35,7 @@ I solved the "tcpdump not available" error by creating a **pure-Python fallback 
    - Viva demo flow
 
 ### For Packet Tracer:
-2. **`NPCAP_AND_PACKET_TRACER_GUIDE.md`**
+2. **`../DEMO_SETUP_GUIDE.md`**
    - Complete step-by-step tutorial (Phases 1-7)
    - Device configuration
    - Traffic generation
@@ -132,7 +132,7 @@ python -m inference.pcap_classifier --pcap data/sample/scapy_test.pcap --output 
 ## 🌐 Packet Tracer (Optional Enhancement)
 
 **Time:** 2-3 hours  
-**Guide:** `NPCAP_AND_PACKET_TRACER_GUIDE.md` (Phases 1-7)
+**Guide:** `../DEMO_SETUP_GUIDE.md`
 
 **What You'll Build:**
 - 1 Router (R1)
@@ -181,7 +181,7 @@ python -m dashboard.app
 ### Docs:
 - `README.md` - Project overview
 - `PCAP_WORKING_SOLUTION.md` - PCAP solution explanation
-- `NPCAP_AND_PACKET_TRACER_GUIDE.md` - Complete PT tutorial
+- `../DEMO_SETUP_GUIDE.md` - Complete setup tutorial
 
 ---
 
@@ -260,7 +260,7 @@ python scripts\simple_scapy_test.py
 ## 📞 Quick Links
 
 - **PCAP Solution:** `PCAP_WORKING_SOLUTION.md`
-- **Packet Tracer Tutorial:** `NPCAP_AND_PACKET_TRACER_GUIDE.md`
+- **Setup Tutorial:** `../DEMO_SETUP_GUIDE.md`
 - **Commands:** `QUICK_REFERENCE.md`
 - **Progress:** `COMPLETION_CHECKLIST.md`
 - **Main README:** `README.md`

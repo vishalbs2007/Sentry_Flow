@@ -298,7 +298,7 @@ For documentation and viva:
 ## Related Documentation
 
 - `traffic_scenarios.md` - How to generate each traffic type
-- `../simulation/README.md` - Simulation directory overview
+- `../../README.md` - Project and simulation overview
 - `../task_reports/CN-023_PLAN.md` - Task implementation plan
 
 ---

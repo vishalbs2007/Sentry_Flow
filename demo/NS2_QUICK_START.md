@@ -154,7 +154,7 @@ powershell simulation\ns2\run_ns2.ps1 -ValidateOnly
 
 ---
 
-### 5. `NS2_INTEGRATION_GUIDE.md` (Documentation)
+### 5. `../DEMO_SETUP_GUIDE.md` (Documentation)
 **What it is:** Complete explanation of everything
 
 **Contains:**
@@ -260,7 +260,7 @@ We use both: Packet Tracer for visual demos, NS2 for validation and bulk testing
 | Converter | `tr_to_pcap.py` | NS2 → PCAP |
 | Automation | `simulation/ns2/run_ns2.ps1` | Runs everything |
 | Validation | `simulation/ns2/validate.py` | Checks accuracy |
-| Full Guide | `NS2_INTEGRATION_GUIDE.md` | Complete docs |
+| Full Guide | `../DEMO_SETUP_GUIDE.md` | Complete docs |
 | Quick Test | `test_ns2_integration.py` | Fast demo |
 | Output PCAP | `simulation/pcaps/ns2_traffic.pcap` | Generated traffic |
 | Ground Truth | `simulation/pcaps/ns2_traffic_labels.csv` | Correct answers |
@@ -277,7 +277,7 @@ We use both: Packet Tracer for visual demos, NS2 for validation and bulk testing
 
 2. **Read full guide:**
    ```
-   Open NS2_INTEGRATION_GUIDE.md
+   Open `../DEMO_SETUP_GUIDE.md`
    ```
 
 3. **Try full pipeline:**
@@ -309,4 +309,4 @@ We use both: Packet Tracer for visual demos, NS2 for validation and bulk testing
 
 ---
 
-**Need help?** See `NS2_INTEGRATION_GUIDE.md` for detailed explanations!
+**Need help?** See `../DEMO_SETUP_GUIDE.md` for detailed explanations.

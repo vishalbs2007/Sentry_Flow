@@ -518,10 +518,10 @@ After running all 4 steps, verify:
 ## Support
 
 ### Documentation
-- `DEMO_README.md` - Detailed usage guide
+- `../README.md` - Project overview
 - `DEMO_SUMMARY.md` - Technical achievements
 - `SOLUTION.md` - Complete project documentation
-- `NS2_INTEGRATION_GUIDE.md` - NS2 integration details
+- `../DEMO_SETUP_GUIDE.md` - NS-2 integration details
 
 ### Questions?
 Check the main documentation files or review the PowerShell scripts in the `demo/` folder.

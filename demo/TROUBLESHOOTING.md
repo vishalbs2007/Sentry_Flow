@@ -229,7 +229,7 @@ python test_ns2_integration.py
 # Say: "Automated traffic generation with ground truth labels"
 
 # 2. Explain architecture
-# Show: NS2_INTEGRATION_GUIDE.md diagrams
+# Show: ../DEMO_SETUP_GUIDE.md diagrams
 # Explain: Complete pipeline flow
 
 # 3. Show trained model performance
@@ -261,9 +261,9 @@ python test_ns2_integration.py
 
 ## 📚 Related Documentation
 
-- **NS2_INTEGRATION_GUIDE.md** - Complete NS2 documentation
+- **../DEMO_SETUP_GUIDE.md** - Complete NS-2 documentation
 - **NS2_STATUS.md** - Current integration status
-- **EASY_COMPLETE_GUIDE.md** - Full project guide
+- **../README.md** - Full project overview
 - **PCAP_WORKING_SOLUTION.md** - Scapy fallback explanation
 
 ---

@@ -15,13 +15,13 @@ import json
 import time
 
 
-def run_command(cmd: str, cwd: Path = None, timeout: int = 120) -> tuple:
+def run_command(args: list[str], cwd: Path = None, timeout: int = 120) -> tuple:
     """Run a command and return (returncode, stdout, stderr).
     
     Parameters
     ----------
-    cmd : str
-        Command to run
+    args : list[str]
+        Command arguments to run without a shell
     cwd : Path, optional
         Working directory
     timeout : int
@@ -37,11 +37,13 @@ def run_command(cmd: str, cwd: Path = None, timeout: int = 120) -> tuple:
         cwd = Path(__file__).parent.parent.parent
     
     result = subprocess.run(
-        cmd,
-        shell=True,
+        args,
+        shell=False,
         cwd=str(cwd),
         capture_output=True,
         text=True,
+        encoding='utf-8',
+        errors='replace',
         timeout=timeout,
     )
     
@@ -55,7 +57,7 @@ def test_scenario_a_environment_verification():
     Tests that the environment script runs and reports versions.
     """
     returncode, stdout, stderr = run_command(
-        'python scripts/verify_environment.py'
+        [sys.executable, 'scripts/verify_environment.py']
     )
     
     # Should succeed
@@ -76,7 +78,7 @@ def test_scenario_a_demo_script():
     Tests that the demo script executes without errors.
     """
     returncode, stdout, stderr = run_command(
-        'python scripts/demo.py',
+        [sys.executable, 'scripts/demo.py'],
         timeout=60
     )
     
@@ -97,21 +99,19 @@ def test_scenario_b_model_evaluation():
     
     Tests that a trained model can be evaluated on test set.
     """
-    # Find a trained model
-    runs_dir = Path('artifacts/runs')
-    if not runs_dir.exists():
-        pytest.skip("No trained models found")
-    
-    run_dirs = list(runs_dir.iterdir())
-    if not run_dirs:
-        pytest.skip("No trained models found")
-    
-    # Use first available model
-    run_id = run_dirs[0].name
+    # Evaluate the active registered model rather than an arbitrary legacy run.
+    registry_path = Path('artifacts/registry/registry.json')
+    if not registry_path.exists():
+        pytest.skip("Model registry not found")
+
+    registry = json.loads(registry_path.read_text(encoding='utf-8'))
+    run_id = registry.get('active_model_id')
+    if not run_id or not (Path('artifacts/runs') / run_id).exists():
+        pytest.skip("No active model run found")
     
     # Run evaluation
     returncode, stdout, stderr = run_command(
-        f'python -m evaluation.evaluate --run-id {run_id}',
+        [sys.executable, '-m', 'evaluation.evaluate', '--run-id', run_id],
         timeout=180
     )
     
@@ -136,7 +136,7 @@ def test_scenario_c_model_comparison():
     Tests that model comparison generates comparison reports.
     """
     returncode, stdout, stderr = run_command(
-        'python -m evaluation.compare',
+        [sys.executable, '-m', 'evaluation.compare'],
         timeout=60
     )
     
@@ -160,7 +160,7 @@ def test_scenario_d_registry_list():
     Tests that registry can list registered models.
     """
     returncode, stdout, stderr = run_command(
-        'python -m models.registry list',
+        [sys.executable, '-m', 'models.registry', 'list'],
         timeout=30
     )
     
@@ -205,9 +205,13 @@ def test_failure_path_no_model():
     """
     # Try to load a non-existent model
     returncode, stdout, stderr = run_command(
-        'python -c "from models.registry import load_model; '
-        'from pathlib import Path; '
-        'load_model(Path(\'artifacts/registry\'), model_id=\'nonexistent\')"',
+        [
+            sys.executable,
+            '-c',
+            "from models.registry import load_model; "
+            "from pathlib import Path; "
+            "load_model(Path('artifacts/registry'), model_id='nonexistent')",
+        ],
         timeout=10
     )
     
@@ -226,8 +230,12 @@ def test_failure_path_missing_config():
     Tests error handling when config is missing.
     """
     returncode, stdout, stderr = run_command(
-        'python -c "from common.config import load_config; '
-        'load_config(\'nonexistent_config.yaml\')"',
+        [
+            sys.executable,
+            '-c',
+            "from common.config import load_config; "
+            "load_config('nonexistent_config.yaml')",
+        ],
         timeout=10
     )
     
@@ -247,7 +255,13 @@ def test_failure_path_invalid_run_id():
     Tests error handling when evaluating non-existent run.
     """
     returncode, stdout, stderr = run_command(
-        'python -m evaluation.evaluate --run-id nonexistent_run_123',
+        [
+            sys.executable,
+            '-m',
+            'evaluation.evaluate',
+            '--run-id',
+            'nonexistent_run_123',
+        ],
         timeout=30
     )
     
@@ -266,7 +280,7 @@ def test_pytest_suite_runs():
     Tests that the test suite itself can be executed.
     """
     returncode, stdout, stderr = run_command(
-        'python -m pytest tests/unit/test_common.py -v',
+        [sys.executable, '-m', 'pytest', 'tests/unit/test_common.py', '-v'],
         timeout=30
     )
     

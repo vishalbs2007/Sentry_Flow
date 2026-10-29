@@ -57,10 +57,10 @@ python test_ns2_integration.py
 3. **simulation/ns2/run_ns2.ps1** - Windows automation
 4. **simulation/ns2/run_ns2.sh** - Linux/Mac automation
 5. **simulation/ns2/validate.py** - Validation tool
-6. **simulation/ns2/README.md** - Quick reference
+6. **../README.md** - Project overview
 
 ### Documentation:
-7. **NS2_INTEGRATION_GUIDE.md** - Complete technical guide (838 lines)
+7. **../DEMO_SETUP_GUIDE.md** - Complete technical guide
 8. **NS2_QUICK_START.md** - Quick reference (312 lines)
 9. **WHATS_NEW_NS2.md** - What's new summary (384 lines)
 10. **test_ns2_integration.py** - Quick test script
@@ -246,11 +246,11 @@ Quick Reference:
 └── NS2_QUICK_START.md - Commands and examples
 
 Deep Dive:
-├── NS2_INTEGRATION_GUIDE.md - Complete technical documentation
+├── ../DEMO_SETUP_GUIDE.md - Complete technical documentation
 └── WHATS_NEW_NS2.md - Integration summary
 
 Project Main:
-└── EASY_COMPLETE_GUIDE.md - Full project guide
+└── ../README.md - Full project overview
 ```
 
 ---

@@ -47,7 +47,7 @@ type artifacts\quick_demo\classification_results.txt
 ### Option B: Full Cisco Packet Tracer Demo
 **Complete demonstration with network simulation**
 
-Follow **EASY_COMPLETE_GUIDE.md** from Part 2 onwards.
+Follow **`../DEMO_SETUP_GUIDE.md`** from the pre-demo checklist onwards.
 
 **Time:** 3-4 hours  
 **Result:** Full network setup + live demo
@@ -119,7 +119,7 @@ Make sure you installed Npcap with "WinPcap API-compatible mode" checked.
 
 | File | Purpose |
 |------|---------|
-| `EASY_COMPLETE_GUIDE.md` | Full step-by-step guide |
+| `../DEMO_SETUP_GUIDE.md` | Full step-by-step guide |
 | `PROJECT_100_PERCENT_COMPLETE.md` | What's been built |
 | `scripts\simple_scapy_test.py` | Quick test tool |
 | `inference\pcap_classifier.py` | Main classifier |
@@ -134,7 +134,7 @@ Make sure you installed Npcap with "WinPcap API-compatible mode" checked.
 2. Later, build Packet Tracer network for full demo
 
 ### Path 2: Full Demo (Complete)
-1. Follow EASY_COMPLETE_GUIDE.md from start
+1. Follow `../DEMO_SETUP_GUIDE.md` from the start
 2. Build network, generate traffic, demonstrate
 
 ---
@@ -146,4 +146,4 @@ You're ready when:
 - ✅ Classifier produces results without errors
 - ✅ You understand what the output means
 
-**Need help?** Check EASY_COMPLETE_GUIDE.md for detailed explanations!
+**Need help?** Check `../DEMO_SETUP_GUIDE.md` for detailed explanations.
