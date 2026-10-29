@@ -1,5 +1,20 @@
 # FlowSentry - Complete Demo Script
 
+## 🚨 IMPORTANT: START HERE!
+
+**Before anything else, open PowerShell and run:**
+
+```powershell
+cd D:\Sentry_Flow
+.venv\Scripts\Activate.ps1
+```
+
+You should see `(.venv) PS D:\Sentry_Flow>` at your prompt.
+
+**If you're not in D:\Sentry_Flow, the commands won't work!**
+
+---
+
 ## 🎯 5-Minute Demonstration
 
 Use this script for your viva/presentation. Everything shown here **actually works and exists**!
@@ -16,6 +31,12 @@ Use this script for your viva/presentation. Everything shown here **actually wor
 ---
 
 ## Part 2: Trained Model Results (2 minutes)
+
+**FIRST: Navigate to project directory!**
+
+```powershell
+cd D:\Sentry_Flow
+```
 
 ### Step 1: Show Model Comparison
 
