@@ -359,6 +359,9 @@ ping 10.0.1.103
 
 ## Part 3: Generate Traffic (15 Minutes)
 
+**⚠️ Important Note about Packet Tracer:**
+Packet Tracer's ping is limited (no `-t` or `-l` flags like Windows). Just run commands multiple times to generate traffic, or use Web Browser for HTTP traffic.
+
 Now let's create each type of traffic!
 
 ### Traffic Type 1: Web Browsing (3 min)
@@ -378,11 +381,22 @@ Now let's create each type of traffic!
 
 1. Open **PC-VoIP**
 2. **Desktop** → **Command Prompt**
-3. Type: `ping 10.0.1.101 -t`
-4. Let it run for 30 seconds
-5. Press **Ctrl+C** to stop
+3. Type: `ping 10.0.1.101`
+4. Wait for it to complete (4 pings)
+5. Repeat the command 5-10 times: `ping 10.0.1.101`
 
-**This creates constant small packets (VoIP simulation)**
+**OR** Type multiple pings at once:
+```
+ping 10.0.1.101
+ping 10.0.1.101
+ping 10.0.1.101
+ping 10.0.1.101
+ping 10.0.1.101
+```
+
+**This creates small packets repeatedly (VoIP simulation)**
+
+**Note:** Packet Tracer doesn't support `-t` flag. Just run ping multiple times.
 
 ---
 
@@ -390,11 +404,19 @@ Now let's create each type of traffic!
 
 1. Open **PC-Stream**
 2. **Desktop** → **Command Prompt**
-3. Type: `ping 10.0.1.102 -l 1400 -t`
-4. Let it run for 30 seconds
-5. Press **Ctrl+C** to stop
+3. Type: `ping 10.0.1.102`
+4. Repeat the ping command 10-15 times
 
-**This creates large sustained packets (Streaming simulation)**
+**OR** Use the Web Browser for larger traffic:
+1. **Desktop** → **Web Browser**
+2. URL: `http://10.0.1.102`
+3. Click **Go**
+4. Refresh the page multiple times (10-15 times)
+5. This simulates sustained traffic
+
+**This creates repeated traffic (Streaming simulation)**
+
+**Note:** Packet Tracer doesn't support `-l` (packet size) flag. Use repeated pings or HTTP requests instead.
 
 ---
 
@@ -539,15 +561,15 @@ Now you're ready for the complete demonstration!
 
 **3.2 VoIP (1.5 min):**
 - Open PC-VoIP → Command Prompt
-- `ping 10.0.1.101 -t`
-- "VoIP simulation - small packets, constant rate"
-- Ctrl+C to stop
+- Type: `ping 10.0.1.101`
+- Run it multiple times (5-10 times)
+- "VoIP simulation - small packets, repeated connections"
 
 **3.3 Streaming (1.5 min):**
-- Open PC-Stream → Command Prompt
-- `ping 10.0.1.102 -l 1400 -t`
-- "Streaming - large packets, sustained"
-- Ctrl+C to stop
+- Open PC-Stream → Web Browser
+- Go to `http://10.0.1.102`
+- Refresh multiple times (10-15 times)
+- "Streaming simulation - sustained HTTP requests"
 
 **3.4 FTP (3.5 min):**
 - Open PC-FTP → Command Prompt
