@@ -23,12 +23,22 @@ def convert(tr_path, pcap_path, router):
     with open(tr_path) as f:
         for line in f:
             p = line.split()
-            if len(p) < 12 or p[0] != "r" or int(p[3]) != router:
-                continue                                   # only arrivals at router
+            if len(p) < 12 or p[0] != "r":
+                continue
+            # Handle both formats: "_4_" and "4"
+            dst_node = p[3].strip('_')
+            try:
+                if int(dst_node) != router:
+                    continue                                   # only arrivals at router
+            except ValueError:
+                continue
             t, ptype, size, fid = float(p[1]), p[4], int(p[5]), int(p[7])
             if fid not in FLOWS:
                 continue
-            src, dst = int(float(p[8])), int(float(p[9]))
+            # Handle both formats for source/dest: "_0_" and "0"
+            src_str = p[8].strip('_')
+            dst_str = p[9].strip('_')
+            src, dst = int(float(src_str)), int(float(dst_str))
             cls, proto, sport_srv = FLOWS[fid]
             to_server = src <= 3
             cport = 40000 + fid

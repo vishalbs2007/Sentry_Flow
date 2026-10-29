@@ -23,7 +23,7 @@ import pandas as pd
 import json
 
 from flow.pcap_flow_extractor import PcapFlowExtractor
-from models.registry import load_model, get_registry_dir
+from models.registry import load_model
 from common.errors import FlowExtractionError, SchemaMismatchError, RegistryIntegrityError
 from common.logging_setup import setup_logging
 from common.paths import ProjectPaths
@@ -62,15 +62,12 @@ class PcapClassifier:
         """Initialize PCAP classifier."""
         logger.info("Initializing PcapClassifier...")
         
-        # Load model from registry
-        if registry_dir is None:
-            config = load_config()
-            paths = ProjectPaths(config)
-            registry_dir = paths.artifacts / 'registry'
+        # Note: registry_dir parameter is ignored, kept for API compatibility
+        # load_model() uses ProjectPaths internally
         
         logger.info(f"Loading model from registry: {model_id or 'active'}")
-        self.model, self.model_metadata = load_model(
-            registry_dir=registry_dir,
+        # load_model returns: (pipeline, metadata, feature_schema, label_encoder)
+        self.model, self.model_metadata, self.feature_schema, self.label_encoder = load_model(
             model_id=model_id
         )
         

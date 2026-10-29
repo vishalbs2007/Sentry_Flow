@@ -78,6 +78,15 @@ class ExtractionError(FlowSentryError):
     """
 
 
+class FlowExtractionError(FlowSentryError):
+    """Raised when flow feature extraction fails during PCAP processing.
+
+    Examples: Scapy cannot read PCAP, flow parsing error, feature computation fails.
+    
+    TRD §22, PC-004.
+    """
+
+
 class ModelNotFoundError(FlowSentryError):
     """Raised when a requested model ID does not exist in the registry.
 

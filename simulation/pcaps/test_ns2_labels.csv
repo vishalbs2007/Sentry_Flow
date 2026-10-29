@@ -1,0 +1,5 @@
+client_ip,client_port,server_port,proto,true_class
+10.0.0.10,40001,80,tcp,Web Browsing
+10.0.0.11,40002,5004,udp,VoIP
+10.0.0.12,40003,5005,udp,Streaming
+10.0.0.13,40004,21,tcp,File Transfer
