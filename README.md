@@ -14,14 +14,15 @@
 > ✅ **Documentation:** Complete guides (10,000+ lines)  
 > 
 > **🎯 Quick Test:** Run `python scripts\simple_scapy_test.py` (2 min)  
-> **📚 Full Demo:** See `COMPLETE_DEMONSTRATION_GUIDE.md` (3 hours setup)
+> **📚 Full Demo:** See `EASY_COMPLETE_GUIDE.md` (3-4 hours with Packet Tracer)  
+> **🔬 NS2 Integration:** See `NS2_INTEGRATION_GUIDE.md` for automated traffic generation
 
 **Team:** Sudir Niranj R (24BDS0267) · Vishal B S (24BCE2475)  
 **Institution:** Computer Networks Academic Project  
 **Date:** October 2026
 
-> **🎯 NEW USER? START HERE:** Read `READ_ME_FIRST.md` for 2-minute quick start!  
-> **📖 DEMONSTRATION GUIDE:** See `COMPLETE_DEMONSTRATION_GUIDE.md` for full setup!
+> **🎯 NEW USER? START HERE:** Read `EASY_COMPLETE_GUIDE.md` for step-by-step guide!  
+> **🔬 NS2 TRAFFIC GENERATION:** See `NS2_INTEGRATION_GUIDE.md` for automated simulation!
 
 ---
 
