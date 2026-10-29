@@ -274,6 +274,16 @@ cd D:\Sentry_Flow
 .\.venv\Scripts\Activate.ps1
 ```
 
+### Problem: "ModuleNotFoundError: No module named 'preprocessing'"
+**Solution**: This is now fixed in the scripts. If you still see it:
+```powershell
+# Make sure you're running from project root
+cd D:\Sentry_Flow
+
+# Verify preprocessing module exists
+dir preprocessing
+```
+
 ### Problem: Step 4 says "Classification results not found"
 **Solution**: Run Step 3 first to generate results
 ```powershell
