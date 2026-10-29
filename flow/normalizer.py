@@ -78,8 +78,17 @@ class FlowNormalizer:
             with open(self.schema_path, 'r') as f:
                 schema = yaml.safe_load(f)
             
-            if not schema or 'families' not in schema:
-                raise ConfigError("Invalid feature schema: 'families' key missing")
+            # Handle both old and new schema formats
+            if not schema:
+                raise ConfigError("Empty feature schema")
+            
+            # New format: 'feature_families' + 'features' list
+            # Old format: 'families' with nested features
+            if 'features' in schema or 'feature_families' in schema:
+                # New format - valid
+                return schema
+            elif 'families' not in schema:
+                raise ConfigError("Invalid feature schema: missing 'families' or 'features' key")
             
             return schema
         except Exception as e:
@@ -96,6 +105,15 @@ class FlowNormalizer:
         """
         required = []
         
+        # New format: 'features' list directly
+        if 'features' in self.schema:
+            for feature in self.schema['features']:
+                if isinstance(feature, dict) and 'name' in feature:
+                    if feature.get('role') == 'feature':  # Exclude target/metadata
+                        required.append(feature['name'])
+            return required
+        
+        # Old format: 'families' with nested features
         for family in self.schema.get('families', []):
             for feature in family.get('features', []):
                 if feature.get('required', True):  # Default to required

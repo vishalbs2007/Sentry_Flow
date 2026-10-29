@@ -372,7 +372,7 @@ def main():
     
     # Validate input
     if not args.pcap.exists():
-        print(f"❌ Error: PCAP file not found: {args.pcap}")
+        print(f"[ERROR] PCAP file not found: {args.pcap}")
         return 1
     
     # Default output directory
@@ -396,7 +396,7 @@ def main():
         classifier = PcapClassifier(model_id=args.model_id)
         
         model_info = classifier.get_model_info()
-        print(f"✅ Loaded: {model_info['model_name']} ({model_info['model_id']})")
+        print(f"[OK] Loaded: {model_info['model_name']} ({model_info['model_id']})")
         print()
         
         # Classify PCAP
@@ -424,27 +424,27 @@ def main():
             print(f"\nAverage confidence: {summary['average_confidence']:.4f}")
         
         print()
-        print(f"✅ Predictions saved to: {args.output}")
+        print(f"[OK] Predictions saved to: {args.output}")
         print("=" * 70)
         
         return 0
         
     except FileNotFoundError as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] {e}")
         return 1
     except FlowExtractionError as e:
-        print(f"❌ Flow extraction failed: {e}")
+        print(f"[ERROR] Flow extraction failed: {e}")
         return 1
     except SchemaMismatchError as e:
-        print(f"❌ Schema mismatch: {e}")
-        print("\n💡 Hint: Model may have been trained with different features.")
+        print(f"[ERROR] Schema mismatch: {e}")
+        print("\nHint: Model may have been trained with different features.")
         return 1
     except RegistryIntegrityError as e:
-        print(f"❌ Registry integrity error: {e}")
+        print(f"[ERROR] Registry integrity error: {e}")
         return 1
     except Exception as e:
         logger.exception("Unexpected error during classification")
-        print(f"❌ Unexpected error: {e}")
+        print(f"[ERROR] Unexpected error: {e}")
         return 1
 
 
